@@ -7,7 +7,6 @@ import './AuthForm.scss';
 class AuthForm extends Component {
   state = {
     errorMessage: '',
-    disabled: true,
     login: '',
     password: ''
   }
@@ -30,7 +29,7 @@ class AuthForm extends Component {
 
   render() {
     const {
-      errorMessage, disabled, login, password
+      errorMessage, login, password
     } = this.state;
 
     return <div className="auth-form-wrap">
@@ -38,8 +37,12 @@ class AuthForm extends Component {
         <div className="auth-form-top">
           <h2>Вход</h2>
           <div className="auth-form-group">
-            <label htmlFor="login">Эл. почта или телефон</label>
+            <label
+              htmlFor="login"
+              className="auth-form-label"
+            >Эл. почта или телефон</label>
             <input
+              className="auth-form-input"
               type="text"
               name="login"
               id="login"
@@ -48,8 +51,12 @@ class AuthForm extends Component {
             />
           </div>
           <div className="auth-form-group">
-            <label htmlFor="password">Пароль</label>
+            <label
+              htmlFor="password"
+              className="auth-form-label"
+            >Пароль</label>
             <input
+              className="auth-form-input"
               type="password"
               name="password"
               id="password"
@@ -57,17 +64,19 @@ class AuthForm extends Component {
               onChange={this.onChange}
             />
             <button
-              className="auth-form-restore-password"
+              className="auth-form-button auth-form-restore-password"
               onClick={this.restorePassword}
+              type="button"
             >Напомнить</button>
           </div>
         </div>
 
         <div className="auth-form-bottom">
           <button
-            className="auth-form-send"
+            className="auth-form-button auth-form-send-button"
             onClick={this.send}
-            disabled={disabled}
+            disabled={!login || !password}
+            type="button"
           >
             Войти на площадку
           </button>
