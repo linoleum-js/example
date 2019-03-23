@@ -5,6 +5,13 @@ import { connect } from 'react-redux';
 import './AuthForm.scss';
 
 class AuthForm extends Component {
+  state = {
+    errorMessage: '',
+    disabled: true,
+    login: '',
+    password: ''
+  }
+
   restorePassword = () => {
 
   }
@@ -13,8 +20,18 @@ class AuthForm extends Component {
 
   }
 
+  onChange = (event) => {
+    const { target } = event;
+    const { name, value } = target;
+    this.setState({
+      [name]: value
+    })
+  }
+
   render() {
-    const { errorMessage } = this.state;
+    const {
+      errorMessage, disabled, login, password
+    } = this.state;
 
     return <div className="auth-form-wrap">
       <form className="auth-form-content">
@@ -22,11 +39,23 @@ class AuthForm extends Component {
           <h2>Вход</h2>
           <div className="auth-form-group">
             <label htmlFor="login">Эл. почта или телефон</label>
-            <input type="text" name="login" id="login" />
+            <input
+              type="text"
+              name="login"
+              id="login"
+              value={login}
+              onChange={this.onChange}
+            />
           </div>
           <div className="auth-form-group">
             <label htmlFor="password">Пароль</label>
-            <input type="password" name="password" id="password" />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={password}
+              onChange={this.onChange}
+            />
             <button
               className="auth-form-restore-password"
               onClick={this.restorePassword}
@@ -38,6 +67,7 @@ class AuthForm extends Component {
           <button
             className="auth-form-send"
             onClick={this.send}
+            disabled={disabled}
           >
             Войти на площадку
           </button>
