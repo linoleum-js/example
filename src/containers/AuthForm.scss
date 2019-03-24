@@ -29,6 +29,10 @@
     transition: border-color .2s;
     padding: 0 10px 2px;
     background: #fff;
+
+    &:disabled {
+      background: #f8f8f8;
+    }
   }
 
   &-label {

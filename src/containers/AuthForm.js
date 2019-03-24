@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { AUTHORIZE, RESTORE_PASSWORD } from '../constants/constants';
+import {
+  AUTHORIZE,
+  RESTORE_PASSWORD,
+  RESET_FORM
+} from '../constants/constants';
 
 import './AuthForm.scss';
 
@@ -34,6 +38,10 @@ class AuthForm extends Component {
     this.setState({ noLogin: false });
   }
 
+  letEnterPassword = () => {
+    this.props.resetForm();
+  }
+
   send = () => {
     const { login, password } = this.state;
     const { authorizeAction } = this.props;
@@ -54,8 +62,10 @@ class AuthForm extends Component {
       login, password, noLogin
     } = this.state;
     const {
-      loading, error, restoreError
+      loading, error, restoreError, passwordRestored
     } = this.props;
+    const passwordValue = passwordRestored ?
+      'Ссылка отправлена на почту' : password;
 
     const errorMessage = getErrorMessage({ error, restoreError, noLogin });
 
@@ -87,14 +97,22 @@ class AuthForm extends Component {
               type="password"
               name="password"
               id="password"
-              value={password}
+              value={passwordValue}
               onChange={this.onChange}
+              disabled={passwordRestored}
             />
-            <button
-              className="auth-form-button auth-form-restore-password"
-              onClick={this.restorePassword}
-              type="button"
-            >Напомнить</button>
+            {passwordRestored ?
+              <button
+                className="auth-form-button auth-form-restore-password"
+                onClick={this.letEnterPassword}
+                type="button"
+              >Ввести пароль</button> :
+              <button
+                className="auth-form-button auth-form-restore-password"
+                onClick={this.restorePassword}
+                type="button"
+              >Напомнить</button>
+            }
           </div>
         </div>
 
@@ -116,14 +134,11 @@ class AuthForm extends Component {
 
 export default connect((state) => {
   return {
-    error: state.user.error,
-    restoreError: state.user.restoreError,
-    loading: state.user.loading
+    ...state.user
   }
 }, (dispatch) => {
   return {
     authorizeAction: (credentials) => {
-      console.log('authorizeAction called');
       dispatch({
         type: AUTHORIZE,
         payload: credentials
@@ -134,6 +149,7 @@ export default connect((state) => {
         type: RESTORE_PASSWORD,
         payload: credentials
       });
-    }
+    },
+    resetForm: () => dispatch({ type: RESET_FORM })
   };
 })(AuthForm);
