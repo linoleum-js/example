@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 
-import { authorizeAction, restorePassrwordAction } from '../actions/actions';
+import { AUTHORIZE, RESTORE_PASSWORD } from '../constants/constants';
 
 import './AuthForm.scss';
 
@@ -121,6 +120,20 @@ export default connect((state) => {
     restoreError: state.user.restoreError,
     loading: state.user.loading
   }
-}, {
-  authorizeAction
+}, (dispatch) => {
+  return {
+    authorizeAction: (credentials) => {
+      console.log('authorizeAction called');
+      dispatch({
+        type: AUTHORIZE,
+        payload: credentials
+      });
+    },
+    restorePasswordAction: (credentials) => {
+      dispatch({
+        type: RESTORE_PASSWORD,
+        payload: credentials
+      });
+    }
+  };
 })(AuthForm);
