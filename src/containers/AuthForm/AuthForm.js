@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Prealoder from '../../components/Preloader/Preloader';
+
 import {
   AUTHORIZE,
   RESTORE_PASSWORD,
   RESET_FORM
-} from '../constants/constants';
+} from '../../constants/constants';
 
 import './AuthForm.scss';
 
@@ -30,12 +32,14 @@ class AuthForm extends Component {
   }
 
   restorePassword = () => {
-    const { login, password } = this.state;
+    const { login } = this.state;
+    const { restorePasswordAction } = this.props;
     if (!login) {
       this.setState({ noLogin: true });
       return;
     }
     this.setState({ noLogin: false });
+    restorePasswordAction({ login });
   }
 
   letEnterPassword = () => {
@@ -62,14 +66,20 @@ class AuthForm extends Component {
       login, password, noLogin
     } = this.state;
     const {
-      loading, error, restoreError, passwordRestored
+      loading, error, restoreError, passwordRestored, authorized
     } = this.props;
     const passwordValue = passwordRestored ?
       'Ссылка отправлена на почту' : password;
 
     const errorMessage = getErrorMessage({ error, restoreError, noLogin });
 
+    if (authorized) {
+      // redirect and stuff
+    }
+
     return <div className="auth-form-wrap">
+      {loading && <Prealoder />}
+
       <form className="auth-form-content">
         <div className="auth-form-top">
           <h2>Вход</h2>
@@ -94,7 +104,7 @@ class AuthForm extends Component {
             >Пароль</label>
             <input
               className="auth-form-input"
-              type="password"
+              type={passwordRestored ? 'text' : 'password'}
               name="password"
               id="password"
               value={passwordValue}

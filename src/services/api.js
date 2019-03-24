@@ -12,3 +12,14 @@ export const authorize = (credentials) => {
       return response.json();
     })
 };
+
+export const restore = (credentials) => {
+  return fetch(`${BASE_URL}/users/reset-password`, {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })
+    .then(response => {
+      return response.json();
+    })
+};
+

@@ -2,7 +2,6 @@ require('babel-polyfill');
 
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   context: __dirname,
@@ -35,7 +34,8 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader!sass-loader'
+        loader: 'style-loader!css-loader!sass-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.(png|jpg)$/,
